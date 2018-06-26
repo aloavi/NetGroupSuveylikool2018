@@ -18,6 +18,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using BLL.Interfaces;
 using BLL.Services;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace WebApp
 {
@@ -52,6 +53,24 @@ namespace WebApp
             services.AddTransient<IInfoService, InfoService>();
             services.AddTransient<IDiagnoseService, DiagnoseService>();
 
+
+            #region jsonconfiguration
+            services.AddMvc().AddJsonOptions(options =>
+            {
+                options.SerializerSettings.ReferenceLoopHandling
+                    = Newtonsoft.Json.ReferenceLoopHandling.Serialize;
+                options.SerializerSettings.PreserveReferencesHandling
+                    = Newtonsoft.Json.PreserveReferencesHandling.Objects;
+                options.SerializerSettings.Formatting
+                    = Newtonsoft.Json.Formatting.Indented;
+            });
+            #endregion
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
+            });
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
@@ -73,6 +92,14 @@ namespace WebApp
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
 
             app.UseMvc(routes =>
             {
