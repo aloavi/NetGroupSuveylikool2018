@@ -39,6 +39,7 @@ namespace DAL.EF
             RepositoryDbSet.Remove(entity);
         }
 
+
         public virtual async Task RemoveAsync(params object[] id)
         {
             Remove(await FindAsync(id));

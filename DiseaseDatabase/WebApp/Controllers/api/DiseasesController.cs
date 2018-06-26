@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using BLL.DTO;
 using BLL.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using DAL.App.EF;
-using Domain;
 
 namespace WebApp.Controllers.api
 {
@@ -16,12 +11,10 @@ namespace WebApp.Controllers.api
     [ApiController]
     public class DiseasesController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
         private readonly IDiseaseService _diseaseService;
 
-        public DiseasesController(ApplicationDbContext context, IDiseaseService diseaseService)
+        public DiseasesController(IDiseaseService diseaseService)
         {
-            _context = context;
             _diseaseService = diseaseService;
         }
 
@@ -77,7 +70,7 @@ namespace WebApp.Controllers.api
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!DiseaseExists(id))
+                if (!await DiseaseExists(id))
                 {
                     return NotFound();
                 }

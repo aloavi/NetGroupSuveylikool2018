@@ -28,9 +28,9 @@ namespace WebApp.Controllers.api
         #region CRUD
         // GET: api/Symptoms
         [HttpGet]
-        public IEnumerable<Symptom> GetSymptoms()
+        public async Task<List<SymptomDTO>> GetSymptomsAsync()
         {
-            return _context.Symptoms;
+            return await _symptomService.GetAllAsync();
         }
 
         // GET: api/Symptoms/5
@@ -42,7 +42,7 @@ namespace WebApp.Controllers.api
                 return BadRequest(ModelState);
             }
 
-            var symptom = await _context.Symptoms.FindAsync(id);
+            var symptom = await _symptomService.GetByIdAsync(id);
 
             if (symptom == null)
             {
@@ -54,7 +54,7 @@ namespace WebApp.Controllers.api
 
         // PUT: api/Symptoms/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutSymptom([FromRoute] int id, [FromBody] Symptom symptom)
+        public async Task<IActionResult> PutSymptom([FromRoute] int id, [FromBody] SymptomDTO symptom)
         {
             if (!ModelState.IsValid)
             {
@@ -66,15 +66,18 @@ namespace WebApp.Controllers.api
                 return BadRequest();
             }
 
-            _context.Entry(symptom).State = EntityState.Modified;
+            var dbSymptom = await _symptomService.GetByIdAsync(symptom.SymptomId);
+            if (dbSymptom == null)
+                return NotFound();
 
             try
             {
-                await _context.SaveChangesAsync();
+                dbSymptom.SymptomName = symptom.SymptomName;
+                await _symptomService.Update(dbSymptom);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!SymptomExists(id))
+                if (!await SymptomExists(id))
                 {
                     return NotFound();
                 }
@@ -89,15 +92,14 @@ namespace WebApp.Controllers.api
 
         // POST: api/Symptoms
         [HttpPost]
-        public async Task<IActionResult> PostSymptom([FromBody] Symptom symptom)
+        public async Task<IActionResult> PostSymptom([FromBody] SymptomDTO symptom)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _context.Symptoms.Add(symptom);
-            await _context.SaveChangesAsync();
+            symptom = await _symptomService.AddAsync(symptom);
 
             return CreatedAtAction("GetSymptom", new { id = symptom.SymptomId }, symptom);
         }
@@ -111,21 +113,21 @@ namespace WebApp.Controllers.api
                 return BadRequest(ModelState);
             }
 
-            var symptom = await _context.Symptoms.FindAsync(id);
+            var symptom = await _symptomService.GetByIdAsync(id);
             if (symptom == null)
             {
                 return NotFound();
             }
 
-            _context.Symptoms.Remove(symptom);
-            await _context.SaveChangesAsync();
+            await _symptomService.Remove(id);
 
             return Ok(symptom);
         }
 
-        private bool SymptomExists(int id)
+
+        private async Task<bool> SymptomExists(int id)
         {
-            return _context.Symptoms.Any(e => e.SymptomId == id);
+            return await _symptomService.ExistsAsync(id);
         }
         #endregion
 
@@ -140,13 +142,13 @@ namespace WebApp.Controllers.api
         }
 
         /// <summary>
-        /// Returns top 3 symptoms occuring in most diseases
-        /// by alphabetic order if the symptoms occure in the same amount of diseases.
+        /// Returns top 3 symptoms occuring in most symptoms
+        /// by alphabetic order if the symptoms occure in the same amount of symptoms.
         /// </summary>
-        /// <param name="take">Number of diseases to get. Defaults to 3</param>
+        /// <param name="take">Number of symptoms to get. Defaults to 3</param>
         /// <returns>A List of Symptoms</returns>
         [HttpGet("top/{take}")]
-        public async Task<List<SymptomDTO>> GetTopDiseases(int? take)
+        public async Task<List<SymptomDTO>> GetTopSymptoms(int? take)
         {
             if (take == null) take = 3;
             return await _symptomService.GetTopSymptomsAsync(take.Value);

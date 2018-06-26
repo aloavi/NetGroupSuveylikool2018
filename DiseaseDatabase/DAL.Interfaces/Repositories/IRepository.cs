@@ -13,7 +13,6 @@ namespace DAL.Interfaces.Repositories
         Task AddAsync(TEntity entity);
         TEntity Update(TEntity entity);
         void Remove(TEntity entity);
-        void Remove(int id);
         Task RemoveAsync(params object[] id);
         Task<int> CountAsync();
         void Clear();
