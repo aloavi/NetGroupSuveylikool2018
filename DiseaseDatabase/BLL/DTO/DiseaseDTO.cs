@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Domain;
 
 namespace BLL.DTO
@@ -12,7 +13,8 @@ namespace BLL.DTO
         [Required]
         [MaxLength(120)]
         public string DiseaseName { get; set; }
-        public List<SymptomDTO> Symptoms { get; set; } = new List<SymptomDTO>();
+
+        public List<SymptomDTO> Symptoms { get; set; }
 
         internal static DiseaseDTO CreateFromDomain(Disease d)
         {

@@ -12,7 +12,7 @@ using Domain;
 
 namespace WebApp.Controllers.api
 {
-    [Route("api/[controller]")]
+    [Route("api/symptoms")]
     [ApiController]
     public class SymptomsController : ControllerBase
     {
@@ -145,7 +145,7 @@ namespace WebApp.Controllers.api
         /// </summary>
         /// <param name="take">Number of diseases to get. Defaults to 3</param>
         /// <returns>A List of Symptoms</returns>
-        [HttpGet("top")]
+        [HttpGet("top/{take}")]
         public async Task<List<SymptomDTO>> GetTopDiseases(int? take)
         {
             if (take == null) take = 3;

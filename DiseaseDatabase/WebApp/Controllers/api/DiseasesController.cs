@@ -136,7 +136,7 @@ namespace WebApp.Controllers.api
         /// </summary>
         /// /// <param name="take">Number of symptoms to get. Defaults to 3</param>
         /// <returns>A List of Diseases</returns>
-        [HttpGet("top")]
+        [HttpGet("top/{take}")]
         public async Task<List<DiseaseDTO>> GetTopDiseases(int? take)
         {
             if (take == null) take = 3;

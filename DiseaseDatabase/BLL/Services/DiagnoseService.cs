@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using BLL.DTO;
 using BLL.Interfaces;
 using DAL.App.Interfaces;
+using Domain;
 
 namespace BLL.Services
 {
@@ -15,9 +17,13 @@ namespace BLL.Services
             _uow = uow;
         }
 
-        public Task<List<DiseaseDTO>> DiagnoseAsync(List<SymptomDTO> symptoms)
+        public async Task<List<DiseaseDTO>> DiagnoseAsync(List<SymptomDTO> symptoms)
         {
-            throw new System.NotImplementedException();
+            List<Disease> diseases = await _uow.Diseases.GetBySymptomsAsync(symptoms
+                .Select(SymptomDTO.CreateFromDTO)
+                .ToList());
+
+            return diseases.Select(DiseaseDTO.CreateFromDomainWithDiseases).ToList();
         }
 
         public Task<SymptomDTO> DiagnoseInteractiveAsync(List<SymptomDTO> symptoms)

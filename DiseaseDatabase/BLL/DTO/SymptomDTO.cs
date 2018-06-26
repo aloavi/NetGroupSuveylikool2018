@@ -11,26 +11,27 @@ namespace BLL.DTO
         [Required]
         [MaxLength(120)]
         public string SymptomName { get; set; }
-        public List<DiseaseDTO> Diseases { get; set; } = new List<DiseaseDTO>();
 
-        public static SymptomDTO CreateFromDomain(Symptom s)
+        public static SymptomDTO CreateFromDomain(Symptom symptom)
         {
-            if (s == null) return null;
+            if (symptom == null) return null;
 
             return new SymptomDTO()
             {
-                SymptomId = s.SymptomId,
-                SymptomName = s.SymptomName
+                SymptomId = symptom.SymptomId,
+                SymptomName = symptom.SymptomName
             };
         }
 
-        public static SymptomDTO CreateFromDomainWithDiseases(Symptom s)
+        public static Symptom CreateFromDTO(SymptomDTO symptomDTO)
         {
-            var symptom = CreateFromDomain(s);
-            if (symptom == null) return null;
+            if (symptomDTO == null) return null;
 
-            symptom.Diseases = s?.Diseases?.Select(c => DiseaseDTO.CreateFromDomain(c.Disease)).ToList();
-            return symptom;
+            return new Symptom()
+            {
+                SymptomId = symptomDTO.SymptomId,
+                SymptomName = symptomDTO.SymptomName
+            };
         }
     }
 }

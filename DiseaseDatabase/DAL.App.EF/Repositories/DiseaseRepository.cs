@@ -27,5 +27,20 @@ namespace DAL.App.EF.Repositories
                 .Take(take)
                 .ToListAsync();
         }
+
+        public async Task<List<Disease>> GetBySymptomsAsync(List<Symptom> symptoms)
+        {
+            var diseases = RepositoryDbSet.Include(d=>d.Symptoms).ThenInclude(s => s.Symptom).AsQueryable();
+
+            foreach (var symptom in symptoms)
+            {
+                diseases = diseases.Where(d => d.Symptoms.Any(s => s.SymptomId == symptom.SymptomId));
+            }
+
+            return await diseases
+                .OrderBy(d => d.Symptoms.Count)
+                .ThenBy(d => d.DiseaseName)
+                .ToListAsync();
+        }
     }
 }
