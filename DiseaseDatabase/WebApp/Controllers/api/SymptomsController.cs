@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BLL.DTO;
+using BLL.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,12 +17,15 @@ namespace WebApp.Controllers.api
     public class SymptomsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly ISymptomService _symptomService;
 
-        public SymptomsController(ApplicationDbContext context)
+        public SymptomsController(ApplicationDbContext context, ISymptomService symptomService)
         {
             _context = context;
+            _symptomService = symptomService;
         }
 
+        #region CRUD
         // GET: api/Symptoms
         [HttpGet]
         public IEnumerable<Symptom> GetSymptoms()
@@ -121,6 +126,30 @@ namespace WebApp.Controllers.api
         private bool SymptomExists(int id)
         {
             return _context.Symptoms.Any(e => e.SymptomId == id);
+        }
+        #endregion
+
+        /// <summary>
+        /// Returns the number of unique symptoms in the database
+        /// </summary>
+        /// <returns>The number of symptoms</returns>
+        [HttpGet("count")]
+        public async Task<ActionResult<int>> Count()
+        {
+            return await _symptomService.SymptomCountAsync();
+        }
+
+        /// <summary>
+        /// Returns top 3 symptoms occuring in most diseases
+        /// by alphabetic order if the symptoms occure in the same amount of diseases.
+        /// </summary>
+        /// <param name="take">Number of diseases to get. Defaults to 3</param>
+        /// <returns>A List of Symptoms</returns>
+        [HttpGet("top")]
+        public async Task<List<SymptomDTO>> GetTopDiseases(int? take)
+        {
+            if (take == null) take = 3;
+            return await _symptomService.GetTopSymptomsAsync(take.Value);
         }
     }
 }

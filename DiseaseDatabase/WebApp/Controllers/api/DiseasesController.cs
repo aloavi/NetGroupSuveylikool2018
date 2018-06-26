@@ -128,17 +128,19 @@ namespace WebApp.Controllers.api
         {
             return _context.Diseases.Any(e => e.DiseaseId == id);
         }
-#endregion
+        #endregion
 
         /// <summary>
         /// Returns top 3 diseases with the most symptoms
         /// by alphabetic order if the diseases have the same amount of symptoms.
         /// </summary>
+        /// /// <param name="take">Number of symptoms to get. Defaults to 3</param>
         /// <returns>A List of Diseases</returns>
         [HttpGet("top")]
-        public async Task<List<DiseaseDTO>> GetTopDiseases()
+        public async Task<List<DiseaseDTO>> GetTopDiseases(int? take)
         {
-            return await _diseaseService.GetTopDiseasesAsync(3);
+            if (take == null) take = 3;
+            return await _diseaseService.GetTopDiseasesAsync(take.Value);
         }
     }
 }

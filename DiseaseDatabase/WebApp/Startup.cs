@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using DAL.App.EF;
@@ -73,7 +74,16 @@ namespace WebApp
             #region swagger
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
+                c.SwaggerDoc("v1", new Info
+                {
+                    Title = "My API",
+                    Version = "v1"
+                });
+
+                // Set the comments path for the Swagger JSON and UI.
+                var xmlFile = "WebApp.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
             });
             #endregion
 

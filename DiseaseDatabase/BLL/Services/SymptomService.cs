@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using BLL.DTO;
 using BLL.Interfaces;
@@ -15,14 +16,15 @@ namespace BLL.Services
             _uow = uow;
         }
 
-        public Task<int> SymptomCountAsync()
+        public async Task<int> SymptomCountAsync()
         {
-            throw new System.NotImplementedException();
+            return await _uow.Symptoms.CountAsync();
         }
 
-        public Task<List<SymptomDTO>> GetTopSymptomsAsync(int ammount = 3)
+        public async Task<List<SymptomDTO>> GetTopSymptomsAsync(int ammount = 3)
         {
-            throw new System.NotImplementedException();
+            var syptom = await _uow.Symptoms.GetTopSymptomsAsync(3);
+            return syptom.Select(SymptomDTO.CreateFromDomain).ToList();
         }
     }
 }
