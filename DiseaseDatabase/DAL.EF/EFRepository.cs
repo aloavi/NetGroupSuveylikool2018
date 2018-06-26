@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DAL.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -41,6 +42,16 @@ namespace DAL.EF
         public virtual async Task RemoveAsync(params object[] id)
         {
             Remove(await FindAsync(id));
+        }
+
+        public async Task<int> CountAsync()
+        {
+            return await RepositoryDbSet.CountAsync();
+        }
+
+        public void Clear()
+        {
+            RepositoryDbSet.RemoveRange(RepositoryDbSet);
         }
 
         public virtual async Task<TEntity> FindAsync(params Object[] id)

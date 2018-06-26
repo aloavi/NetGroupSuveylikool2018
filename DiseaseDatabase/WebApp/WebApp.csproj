@@ -18,12 +18,12 @@
 
   <ItemGroup>
     <Folder Include="Areas\" />
-    <Folder Include="Controllers\api\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\BLL\BLL.csproj" />
     <ProjectReference Include="..\DAL.App.EF\DAL.App.EF.csproj" />
+    <ProjectReference Include="..\Helpers\Helpers.csproj" />
   </ItemGroup>
 
 </Project>

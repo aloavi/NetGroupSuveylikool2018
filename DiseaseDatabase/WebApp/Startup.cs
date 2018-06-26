@@ -19,6 +19,7 @@ using Microsoft.Extensions.DependencyInjection;
 using BLL.Interfaces;
 using BLL.Services;
 using Swashbuckle.AspNetCore.Swagger;
+using Helpers;
 
 namespace WebApp
 {
@@ -49,9 +50,11 @@ namespace WebApp
             services.AddScoped<IRepositoryProvider, EFRepositoryProvider>();
             services.AddScoped<IDataContext, ApplicationDbContext>();
             services.AddScoped<IAppUnitOfWork, AppUnitOfWork>();
+            services.AddTransient<IAppDataInitializator, AppDataInitializator>();
 
             services.AddTransient<IInfoService, InfoService>();
             services.AddTransient<IDiagnoseService, DiagnoseService>();
+
 
 
             #region jsonconfiguration

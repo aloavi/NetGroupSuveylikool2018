@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Helpers;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Models;
 
@@ -10,8 +11,22 @@ namespace WebApp.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IAppDataInitializator _dataInitializator;
+
+        public HomeController(IAppDataInitializator dataInitializator)
+        {
+            _dataInitializator = dataInitializator;
+        }
+
         public IActionResult Index()
         {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Index(string csv)
+        {
+            await _dataInitializator.InitializeDbAsync();
             return View();
         }
 
