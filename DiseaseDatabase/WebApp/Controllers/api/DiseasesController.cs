@@ -28,9 +28,9 @@ namespace WebApp.Controllers.api
         #region CRUD
         // GET: api/Diseases
         [HttpGet]
-        public IEnumerable<Disease> GetDiseases()
+        public async Task<List<DiseaseDTO>> GetDiseasesAsync()
         {
-            return _context.Diseases;
+            return await _diseaseService.GetAllAsync();
         }
 
         // GET: api/Diseases/5
@@ -42,7 +42,7 @@ namespace WebApp.Controllers.api
                 return BadRequest(ModelState);
             }
 
-            var disease = await _context.Diseases.FindAsync(id);
+            var disease = await _diseaseService.GetByIdAsync(id);
 
             if (disease == null)
             {
@@ -54,7 +54,7 @@ namespace WebApp.Controllers.api
 
         // PUT: api/Diseases/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutDisease([FromRoute] int id, [FromBody] Disease disease)
+        public async Task<IActionResult> PutDisease([FromRoute] int id, [FromBody] DiseaseDTO disease)
         {
             if (!ModelState.IsValid)
             {
@@ -66,11 +66,14 @@ namespace WebApp.Controllers.api
                 return BadRequest();
             }
 
-            _context.Entry(disease).State = EntityState.Modified;
+            var dbDisease = await _diseaseService.GetByIdAsync(disease.DiseaseId);
+            if(dbDisease == null)
+                return NotFound();
 
             try
             {
-                await _context.SaveChangesAsync();
+                dbDisease.DiseaseName = disease.DiseaseName;
+                await _diseaseService.Update(dbDisease);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -89,15 +92,14 @@ namespace WebApp.Controllers.api
 
         // POST: api/Diseases
         [HttpPost]
-        public async Task<IActionResult> PostDisease([FromBody] Disease disease)
+        public async Task<IActionResult> PostDisease([FromBody] DiseaseDTO disease)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _context.Diseases.Add(disease);
-            await _context.SaveChangesAsync();
+            disease = await _diseaseService.AddAsync(disease);
 
             return CreatedAtAction("GetDisease", new { id = disease.DiseaseId }, disease);
         }
@@ -111,22 +113,21 @@ namespace WebApp.Controllers.api
                 return BadRequest(ModelState);
             }
 
-            var disease = await _context.Diseases.FindAsync(id);
+            var disease = await _diseaseService.GetByIdAsync(id);
             if (disease == null)
             {
                 return NotFound();
             }
 
-            _context.Diseases.Remove(disease);
-            await _context.SaveChangesAsync();
+            await _diseaseService.Remove(id);
 
             return Ok(disease);
         }
 
-        
-        private bool DiseaseExists(int id)
+
+        private async Task<bool> DiseaseExists(int id)
         {
-            return _context.Diseases.Any(e => e.DiseaseId == id);
+            return await _diseaseService.ExistsAsync(id);
         }
         #endregion
 

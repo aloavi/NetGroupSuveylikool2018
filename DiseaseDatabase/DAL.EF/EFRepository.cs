@@ -58,5 +58,10 @@ namespace DAL.EF
         {
             return await RepositoryDbSet.FindAsync(id);
         }
+
+        public async Task<bool> ExistsAsync(int id)
+        {
+            return await FindAsync(id) != null;
+        }
     }
 }

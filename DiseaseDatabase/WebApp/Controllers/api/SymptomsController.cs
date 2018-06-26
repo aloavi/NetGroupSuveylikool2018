@@ -134,7 +134,7 @@ namespace WebApp.Controllers.api
         /// </summary>
         /// <returns>The number of symptoms</returns>
         [HttpGet("count")]
-        public async Task<ActionResult<int>> Count()
+        public async Task<int> Count()
         {
             return await _symptomService.SymptomCountAsync();
         }

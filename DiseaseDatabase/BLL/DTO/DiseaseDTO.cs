@@ -16,24 +16,35 @@ namespace BLL.DTO
 
         public List<SymptomDTO> Symptoms { get; set; }
 
-        internal static DiseaseDTO CreateFromDomain(Disease d)
+        internal static DiseaseDTO CreateFromDomain(Disease disease)
         {
-            if (d == null) return null;
+            if (disease == null) return null;
 
             return new DiseaseDTO()
             {
-                DiseaseId = d.DiseaseId,
-                DiseaseName = d.DiseaseName
+                DiseaseId = disease.DiseaseId,
+                DiseaseName = disease.DiseaseName
             };
         }
 
-        public static DiseaseDTO CreateFromDomainWithDiseases(Disease d)
+        public static DiseaseDTO CreateFromDomainWithDiseases(Disease disease)
         {
-            var disease = CreateFromDomain(d);
-            if (disease == null) return null;
+            var diseaseDTO = CreateFromDomain(disease);
+            if (diseaseDTO == null) return null;
 
-            disease.Symptoms = d?.Symptoms?.Select(c => SymptomDTO.CreateFromDomain(c.Symptom)).ToList();
-            return disease;
+            diseaseDTO.Symptoms = disease?.Symptoms?.Select(c => SymptomDTO.CreateFromDomain(c.Symptom)).ToList();
+            return diseaseDTO;
+        }
+
+        public static Disease CreateFromDTO(DiseaseDTO dto)
+        {
+            if (dto == null) return null;
+
+            return new Disease()
+            {
+                DiseaseId = dto.DiseaseId,
+                DiseaseName = dto.DiseaseName
+            };
         }
     }
 }
