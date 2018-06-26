@@ -2,14 +2,17 @@
 using System.Threading.Tasks;
 using BLL.DTO;
 using BLL.Interfaces;
+using DAL.App.Interfaces;
 
 namespace BLL.Services
 {
-    public class InfoService : IInfoService
+    public class SymptomService : ISymptomService
     {
-        public Task<List<DiseaseDTO>> GetTopDiseasesAsync(int amount = 3)
+        private readonly IAppUnitOfWork _uow;
+
+        public SymptomService(IAppUnitOfWork uow)
         {
-            throw new System.NotImplementedException();
+            _uow = uow;
         }
 
         public Task<int> SymptomCountAsync()

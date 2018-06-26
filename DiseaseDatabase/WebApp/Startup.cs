@@ -46,16 +46,17 @@ namespace WebApp
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
+            #region DI
             services.AddSingleton<IRepositoryFactoryProvider, EFRepositoryFactoryProvider>();
             services.AddScoped<IRepositoryProvider, EFRepositoryProvider>();
             services.AddScoped<IDataContext, ApplicationDbContext>();
             services.AddScoped<IAppUnitOfWork, AppUnitOfWork>();
             services.AddTransient<IAppDataInitializator, AppDataInitializator>();
 
-            services.AddTransient<IInfoService, InfoService>();
             services.AddTransient<IDiagnoseService, DiagnoseService>();
-
-
+            services.AddTransient<IDiseaseService, DiseaseService>();
+            services.AddTransient<ISymptomService, SymptomService>();
+            #endregion
 
             #region jsonconfiguration
             services.AddMvc().AddJsonOptions(options =>
@@ -69,10 +70,12 @@ namespace WebApp
             });
             #endregion
 
+            #region swagger
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
             });
+            #endregion
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
