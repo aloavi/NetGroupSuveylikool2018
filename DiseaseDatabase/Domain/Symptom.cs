@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Domain
 {
@@ -8,5 +9,7 @@ namespace Domain
         [Required]
         [MaxLength(120)]
         public string SymptomName { get; set; }
+
+        public List<DiseaseSymptom> Diseases { get; set; }
     }
 }

@@ -28,7 +28,8 @@ namespace DAL.App.EF
             GetCustomRepository<IDiseaseRepository>();
         public ISymptomRepository Symptoms =>
             GetCustomRepository<ISymptomRepository>();
-
+        public IDiseaseSymptomRepository DiseaseSymptoms =>
+            GetCustomRepository<IDiseaseSymptomRepository>();
 
         public void SaveChanges()
         {

@@ -31,6 +31,7 @@ namespace DAL.App.EF.Helpers
             {
                 { typeof(IDiseaseRepository), (dataContext) =>  new DiseaseRepository(dataContext as ApplicationDbContext)},
                 { typeof(ISymptomRepository), (dataContext) =>  new SymptomRepository(dataContext as ApplicationDbContext)},
+                { typeof(IDiseaseSymptomRepository), (dataContext) =>  new DiseaseSymptomRepository(dataContext as ApplicationDbContext)},
             };
         }
 

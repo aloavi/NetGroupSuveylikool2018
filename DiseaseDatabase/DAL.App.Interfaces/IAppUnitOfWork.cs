@@ -7,5 +7,6 @@ namespace DAL.App.Interfaces
     {
         IDiseaseRepository Diseases { get; }
         ISymptomRepository Symptoms { get; }
+        IDiseaseSymptomRepository DiseaseSymptoms { get; }
     }
 }

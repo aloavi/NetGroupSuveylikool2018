@@ -1,4 +1,5 @@
 ﻿using DAL.Interfaces;
+using Domain;
 using Microsoft.EntityFrameworkCore;
 
 namespace DAL.App.EF
@@ -9,5 +10,10 @@ namespace DAL.App.EF
             : base(options)
         {
         }
+
+        public DbSet<Disease> Diseases { get; set; }
+        public DbSet<Symptom> Symptoms { get; set; }
+        public DbSet<DiseaseSymptom> DiseaseSymptoms { get; set; }
+
     }
 }
