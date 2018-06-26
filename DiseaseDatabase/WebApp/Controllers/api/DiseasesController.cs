@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BLL.DTO;
+using BLL.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,17 +12,20 @@ using Domain;
 
 namespace WebApp.Controllers.api
 {
-    [Route("api/[controller]")]
+    [Route("api/diseases")]
     [ApiController]
     public class DiseasesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly IDiseaseService _diseaseService;
 
-        public DiseasesController(ApplicationDbContext context)
+        public DiseasesController(ApplicationDbContext context, IDiseaseService diseaseService)
         {
             _context = context;
+            _diseaseService = diseaseService;
         }
 
+        #region CRUD
         // GET: api/Diseases
         [HttpGet]
         public IEnumerable<Disease> GetDiseases()
@@ -118,9 +123,22 @@ namespace WebApp.Controllers.api
             return Ok(disease);
         }
 
+        
         private bool DiseaseExists(int id)
         {
             return _context.Diseases.Any(e => e.DiseaseId == id);
+        }
+#endregion
+
+        /// <summary>
+        /// Returns top 3 diseases with the most symptoms
+        /// by alphabetic order if the diseases have the same amount of symptoms.
+        /// </summary>
+        /// <returns>A List of Diseases</returns>
+        [HttpGet("top")]
+        public async Task<List<DiseaseDTO>> GetTopDiseases()
+        {
+            return await _diseaseService.GetTopDiseasesAsync(3);
         }
     }
 }

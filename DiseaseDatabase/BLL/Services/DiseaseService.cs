@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using BLL.DTO;
 using BLL.Interfaces;
@@ -15,9 +16,10 @@ namespace BLL.Services
             _uow = uow;
         }
 
-        public Task<List<DiseaseDTO>> GetTopDiseasesAsync(int amount = 3)
+        public async Task<List<DiseaseDTO>> GetTopDiseasesAsync(int amount = 3)
         {
-            throw new System.NotImplementedException();
+            var diseases = await _uow.Diseases.GetTopDiseasesAsync(3);
+            return diseases.Select(DiseaseDTO.CreateFromDomain).ToList();
         }
     }
 }

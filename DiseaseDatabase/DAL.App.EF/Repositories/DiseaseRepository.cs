@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DAL.App.Interfaces.Repositories;
 using DAL.EF;
@@ -16,6 +17,15 @@ namespace DAL.App.EF.Repositories
         public async Task<Disease> FindByNameAsync(string name)
         {
             return await RepositoryDbSet.FirstOrDefaultAsync(d => d.DiseaseName == name);
+        }
+
+        public async Task<List<Disease>> GetTopDiseasesAsync(int take)
+        {
+            return await RepositoryDbSet
+                .OrderByDescending(d => d.Symptoms.Count)
+                .ThenBy(d => d.DiseaseName)
+                .Take(take)
+                .ToListAsync();
         }
     }
 }
