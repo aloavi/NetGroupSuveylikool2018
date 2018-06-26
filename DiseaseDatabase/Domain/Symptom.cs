@@ -9,7 +9,6 @@ namespace Domain
         [Required]
         [MaxLength(120)]
         public string SymptomName { get; set; }
-
-        public List<DiseaseSymptom> Diseases { get; set; }
+        public List<DiseaseSymptom> Diseases { get; set; } = new List<DiseaseSymptom>();
     }
 }

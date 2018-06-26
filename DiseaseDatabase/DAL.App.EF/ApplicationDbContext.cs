@@ -15,5 +15,10 @@ namespace DAL.App.EF
         public DbSet<Symptom> Symptoms { get; set; }
         public DbSet<DiseaseSymptom> DiseaseSymptoms { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+        }
     }
 }
