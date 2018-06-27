@@ -4,21 +4,30 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WebClient.Models;
+using WebClient.Services.Interfaces;
 
 namespace WebClient.Controllers
 {
     public class SymptomsController : Controller
     {
-        // GET: Symptoms
-        public ActionResult Index()
+        private readonly ISymptomService _symptomService;
+
+        public SymptomsController(ISymptomService symptomService)
         {
-            return View();
+            _symptomService = symptomService;
+        }
+
+        // GET: Symptoms
+        public async Task<ActionResult> Index()
+        {
+            return View(await _symptomService.GetAllAsync());
         }
 
         // GET: Symptoms/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(int id)
         {
-            return View();
+            return View(await _symptomService.GetByIdAsync(id));
         }
 
         // GET: Symptoms/Create
@@ -30,63 +39,63 @@ namespace WebClient.Controllers
         // POST: Symptoms/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> Create(Symptom symptom)
         {
             try
             {
-                // TODO: Add insert logic here
+                await _symptomService.AddAsync(symptom);
 
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                return View(symptom);
             }
         }
 
         // GET: Symptoms/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
-            return View();
+            return View(await _symptomService.GetByIdAsync(id));
         }
 
         // POST: Symptoms/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(int id, Symptom symptom)
         {
             try
             {
-                // TODO: Add update logic here
+                await _symptomService.UpdateAsync(symptom);
 
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                return View(symptom);
             }
         }
 
         // GET: Symptoms/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            return View();
+            return View(await _symptomService.GetByIdAsync(id));
         }
 
         // POST: Symptoms/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult> Delete(int id, Symptom symptom)
         {
             try
             {
-                // TODO: Add delete logic here
+                await _symptomService.DeleteAsync(symptom.SymptomId);
 
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                return View(symptom);
             }
         }
     }
