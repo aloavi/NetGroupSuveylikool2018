@@ -19,7 +19,7 @@ namespace DAL.EF
             RepositoryDbSet = RepositoryDbContext.Set<TEntity>();
         }
 
-        public virtual async Task<IEnumerable<TEntity>> AllAsync()
+        public virtual async Task<List<TEntity>> AllAsync()
         {
             return await RepositoryDbSet.ToListAsync();
         }

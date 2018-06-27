@@ -8,7 +8,7 @@ namespace DAL.Interfaces.Repositories
 {
     public interface IRepository<TEntity> where TEntity : class
     {
-        Task<IEnumerable<TEntity>> AllAsync();
+        Task<List<TEntity>> AllAsync();
         Task<TEntity> FindAsync(params object[] id); // Find(1) or Find(1,2,3,...) TODO Is params overkill?
         Task AddAsync(TEntity entity);
         TEntity Update(TEntity entity);

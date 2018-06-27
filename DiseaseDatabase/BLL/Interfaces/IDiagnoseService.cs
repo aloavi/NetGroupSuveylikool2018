@@ -7,6 +7,7 @@ namespace BLL.Interfaces
     public interface IDiagnoseService
     {
         Task<List<DiseaseDTO>> DiagnoseAsync(List<SymptomDTO> symptoms);
-        Task<SymptomDTO> DiagnoseInteractiveAsync(List<SymptomDTO> symptoms);
+        Task<Questionnaire> DiagnoseInteractiveAsync();
+        Task<Questionnaire> DiagnoseInteractiveAsync(Questionnaire questionnaire);
     }
 }

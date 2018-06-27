@@ -28,5 +28,13 @@ namespace DAL.App.EF.Repositories
                 .Take(take)
                 .ToListAsync();
         }
+
+        public async Task<List<Symptom>> GetSymptomsWithDiseases()
+        {
+            return await RepositoryDbSet
+                .Include(s=>s.Diseases)
+                .ThenInclude(s=>s.Disease)
+                .ToListAsync();
+        }
     }
 }

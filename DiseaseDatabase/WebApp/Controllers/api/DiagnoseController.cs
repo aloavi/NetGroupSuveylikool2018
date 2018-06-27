@@ -32,5 +32,19 @@ namespace WebApp.Controllers.api
 
             return await _diagnoseService.DiagnoseAsync(symptoms);
         }
+
+        [HttpGet("interactive")]
+        public async Task<Questionnaire> DiagnoseInteractive()
+        {
+            return await _diagnoseService.DiagnoseInteractiveAsync();
+        }
+
+        [HttpPost("interactive")]
+        public async Task<Questionnaire> DiagnoseInteractive([FromBody] Questionnaire answers)
+        {
+            //TODO Validation
+
+            return await _diagnoseService.DiagnoseInteractiveAsync(answers);
+        }
     }
 }
