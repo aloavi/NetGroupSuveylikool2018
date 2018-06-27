@@ -1,0 +1,29 @@
+﻿@model WebClient.ViewModels.DiagnoseSymtomsViewModel
+
+@{
+    ViewData["Title"] = "Symptoms";
+}
+
+<h2>Symptoms</h2>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Results">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @for (var index = 0; index < Model.Symptoms.Count; index++)
+            {
+                <input type="hidden" asp-for="@Model.Symptoms[index].SymptomId" />
+                <input type="hidden" asp-for="@Model.Symptoms[index].SymptomName" />
+                <div class="checkbox">
+                    <label class="control-label">
+                        <input type="checkbox" asp-for="@Model.Symptoms[index].IsSelected" />
+                        @Model.Symptoms[index].SymptomName;
+                    </label>
+                </div>
+            }
+            <div class="form-group">
+                <input type="submit" value="Submit" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>

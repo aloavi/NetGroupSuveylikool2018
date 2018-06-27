@@ -21,9 +21,9 @@ namespace BLL.Services
             return await _uow.Symptoms.CountAsync();
         }
 
-        public async Task<List<SymptomDTO>> GetTopSymptomsAsync(int ammount = 3)
+        public async Task<List<SymptomDTO>> GetTopSymptomsAsync(int take = 3)
         {
-            var syptom = await _uow.Symptoms.GetTopSymptomsAsync(3);
+            var syptom = await _uow.Symptoms.GetTopSymptomsAsync(take);
             return syptom.Select(SymptomDTO.CreateFromDomain).ToList();
         }
 

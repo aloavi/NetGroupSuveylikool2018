@@ -8,5 +8,7 @@ namespace WebClient.Models
         [Required]
         [MaxLength(120)]
         public string SymptomName { get; set; }
+
+        public bool IsSelected { get; set; } = false;
     }
 }

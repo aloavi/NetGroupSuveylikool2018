@@ -41,6 +41,7 @@ namespace WebClient.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(Symptom symptom)
         {
+            //TODO Validation
             try
             {
                 await _symptomService.AddAsync(symptom);
@@ -64,6 +65,7 @@ namespace WebClient.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(int id, Symptom symptom)
         {
+            //TODO Validation
             try
             {
                 await _symptomService.UpdateAsync(symptom);
@@ -87,6 +89,7 @@ namespace WebClient.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(int id, Symptom symptom)
         {
+            //TODO Validation
             try
             {
                 await _symptomService.DeleteAsync(symptom.SymptomId);

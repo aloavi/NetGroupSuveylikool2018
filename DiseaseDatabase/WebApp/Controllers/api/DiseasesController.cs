@@ -128,10 +128,10 @@ namespace WebApp.Controllers.api
         /// Returns top 3 diseases with the most symptoms
         /// by alphabetic order if the diseases have the same amount of symptoms.
         /// </summary>
-        /// /// <param name="take">Number of symptoms to get. Defaults to 3</param>
+        /// <param name="take">Number of symptoms to get. Defaults to 3</param>
         /// <returns>A List of Diseases</returns>
-        [HttpGet("top/{take}")]
-        public async Task<List<DiseaseDTO>> GetTopDiseases(int? take)
+        [HttpGet("top")]
+        public async Task<List<DiseaseDTO>> GetTopDiseases([FromQuery]int? take)
         {
             if (take == null) take = 3;
             return await _diseaseService.GetTopDiseasesAsync(take.Value);

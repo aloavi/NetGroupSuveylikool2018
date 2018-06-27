@@ -11,12 +11,6 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.DiseaseId)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.DiseaseId)
-        </dd>
-        <dt>
             @Html.DisplayNameFor(model => model.DiseaseName)
         </dt>
         <dd>
@@ -25,6 +19,6 @@
     </dl>
 </div>
 <div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Edit" asp-route-id="@Model.DiseaseId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

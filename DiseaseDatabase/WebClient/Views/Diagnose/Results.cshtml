@@ -1,0 +1,57 @@
+﻿@model WebClient.ViewModels.DiagnoseSymtomsViewModel
+
+@{
+    ViewData["Title"] = "Results";
+}
+
+<h3>You were looking for diseases with:</h3>
+<p>
+    @foreach (var symptom in Model.Symptoms)
+    {
+        if (symptom.IsSelected)
+        {
+        <p>@Html.DisplayFor(modelItem => symptom.SymptomName)</p>
+
+        }
+     }
+</p>
+    <h2>Results</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Diseases[0].DiseaseName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Diseases[0].Symptoms)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Diseases)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DiseaseName)
+                    </td>
+                    <td>
+                        @foreach (var symptom in item.Symptoms)
+                        {
+                            if (Model.Symptoms.Where(s => s.SymptomId == symptom.SymptomId).Select(s => s.IsSelected).FirstOrDefault())
+                            {
+                                <strong>@Html.DisplayFor(modelItem => symptom.SymptomName); </strong>
+                            }
+                            else
+                            {
+                                <span>@Html.DisplayFor(modelItem => symptom.SymptomName); </span>
+                            }
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <p>
+        <a asp-action="Symptoms">Back to diagnose</a>
+    </p>
+

@@ -37,10 +37,17 @@ namespace DAL.App.EF.Repositories
                 diseases = diseases.Where(d => d.Symptoms.Any(s => s.SymptomId == symptom.SymptomId));
             }
 
-            return await diseases
+            var ret = await diseases
                 .OrderBy(d => d.Symptoms.Count)
                 .ThenBy(d => d.DiseaseName)
                 .ToListAsync();
+
+            foreach (var disease in ret)
+            {
+                disease.Symptoms = disease.Symptoms.OrderBy(s => s.Symptom.SymptomName).ToList();
+            }
+
+            return ret;
         }
     }
 }

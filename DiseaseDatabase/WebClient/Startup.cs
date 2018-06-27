@@ -33,10 +33,9 @@ namespace WebClient
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
-            services.AddScoped<IDiseaseService, DiseaseService>();
-            services.AddScoped<ISymptomService, SymptomService>();
+            services.AddTransient<IDiseaseService, DiseaseService>();
+            services.AddTransient<ISymptomService, SymptomService>();
+            services.AddTransient<IDiagnoseService, DiagnoseService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

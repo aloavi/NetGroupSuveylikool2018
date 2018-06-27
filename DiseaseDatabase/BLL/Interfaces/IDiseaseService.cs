@@ -6,6 +6,6 @@ namespace BLL.Interfaces
 {
     public interface IDiseaseService : IBaseService<DiseaseDTO>
     {
-        Task<List<DiseaseDTO>> GetTopDiseasesAsync(int amount = 3);
+        Task<List<DiseaseDTO>> GetTopDiseasesAsync(int take = 3);
     }
 }

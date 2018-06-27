@@ -50,6 +50,7 @@ namespace WebClient.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(DiseaseCreateEditViewModel vm)
         {
+            //TODO Validation
             try
             {
                 await _diseaseService.AddAsync(vm.Disease);
@@ -82,6 +83,7 @@ namespace WebClient.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(int id, DiseaseCreateEditViewModel vm)
         {
+            //TODO Validation
             try
             {
                 await _diseaseService.UpdateAsync(vm.Disease);
@@ -107,6 +109,7 @@ namespace WebClient.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, Disease disease)
         {
+            //TODO Validation
             try
             {
                 _diseaseService.DeleteAsync(disease.DiseaseId);

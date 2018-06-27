@@ -16,9 +16,9 @@ namespace BLL.Services
             _uow = uow;
         }
 
-        public async Task<List<DiseaseDTO>> GetTopDiseasesAsync(int amount = 3)
+        public async Task<List<DiseaseDTO>> GetTopDiseasesAsync(int take = 3)
         {
-            var diseases = await _uow.Diseases.GetTopDiseasesAsync(3);
+            var diseases = await _uow.Diseases.GetTopDiseasesAsync(take);
             return diseases.Select(DiseaseDTO.CreateFromDomain).ToList();
         }
 

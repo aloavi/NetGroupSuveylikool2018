@@ -147,8 +147,8 @@ namespace WebApp.Controllers.api
         /// </summary>
         /// <param name="take">Number of symptoms to get. Defaults to 3</param>
         /// <returns>A List of Symptoms</returns>
-        [HttpGet("top/{take}")]
-        public async Task<List<SymptomDTO>> GetTopSymptoms(int? take)
+        [HttpGet("top")]
+        public async Task<List<SymptomDTO>> GetTopSymptoms([FromQuery]int? take)
         {
             if (take == null) take = 3;
             return await _symptomService.GetTopSymptomsAsync(take.Value);

@@ -4,29 +4,32 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using WebClient.Models;
+using WebClient.Services.Interfaces;
 using WebClient.ViewModels;
 
 namespace WebClient.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly IDiseaseService _diseaseService;
+        private readonly ISymptomService _symptomService;
+
+        public HomeController(IDiseaseService diseaseService, ISymptomService symptomService)
         {
-            return View();
+            _diseaseService = diseaseService;
+            _symptomService = symptomService;
         }
 
-        public IActionResult About()
+        public async Task<IActionResult> Index()
         {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
+            var vm = new HomeIndexViewModel
+            {
+                TopDiseases = await _diseaseService.GetTopAsync(),
+                TopSymptoms = await _symptomService.GetTopAsync(),
+                SymptomCount = await _symptomService.GetCountAsync()
+            };
+            return View(vm);
         }
 
         public IActionResult Privacy()

@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebClient.Models;
+using WebClient.ViewModels;
 
 namespace WebClient.Services.Interfaces
 {
-    public interface IDiseaseService : IService<Disease>
+    public interface IDiagnoseService
     {
-        Task<List<Disease>> GetTopAsync();
+        Task<List<Disease>> DiagnoseBySymptomsAsync(List<Symptom> symptoms);
     }
 }

@@ -14,7 +14,7 @@ namespace WebClient.Services
     {
         protected readonly HttpClient Client;
 
-        protected BaseService(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
+        protected BaseService(IConfiguration configuration)
         {
             Client = new HttpClient { BaseAddress = new Uri(configuration["Api:BaseUri"]) };
         }
@@ -38,14 +38,14 @@ namespace WebClient.Services
         }
 
         
-        protected async Task<T> PostAsync<T>(string url, T obj)
+        protected async Task<T> PostAsync<T>(string url, object obj)
         {
             var response = await Client.PostAsJsonAsync(url, obj);
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadAsAsync<T>();
         }
 
-        protected async Task<T> PutAsync<T>(string url, T obj)
+        protected async Task<T> PutAsync<T>(string url, object obj)
         {
             var response = await Client.PutAsJsonAsync(url, obj);
             response.EnsureSuccessStatusCode();

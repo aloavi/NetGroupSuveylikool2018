@@ -13,29 +13,24 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.SymptomId)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.SymptomName)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.SymptomId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SymptomName)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SymptomName)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.SymptomId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.SymptomId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.SymptomId">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

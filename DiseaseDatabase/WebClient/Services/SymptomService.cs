@@ -11,9 +11,9 @@ namespace WebClient.Services
     {
         private readonly string _url;
 
-        protected SymptomService(IConfiguration configuration, IHttpContextAccessor httpContextAccessor) : base(configuration, httpContextAccessor)
+        public SymptomService(IConfiguration configuration) : base(configuration)
         {
-            _url = configuration["Api:Books"];
+            _url = configuration["Api:Symptoms"];
         }
 
         public async Task<List<Symptom>> GetAllAsync() => await GetAsync<List<Symptom>>(_url);
@@ -22,10 +22,13 @@ namespace WebClient.Services
 
         public async Task<Symptom> GetByIdAsync(int id) => await GetAsync<Symptom>($"{_url}/{id}");
 
-        public async Task<Symptom> AddAsync(Symptom entity) => await PostAsync(_url, entity);
+        public async Task<Symptom> AddAsync(Symptom entity) => await PostAsync<Symptom>(_url, entity);
 
-        public async Task<Symptom> UpdateAsync(Symptom entity) => await PutAsync($"{_url}/{entity.SymptomId}", entity);
+        public async Task<Symptom> UpdateAsync(Symptom entity) => await PutAsync<Symptom>($"{_url}/{entity.SymptomId}", entity);
 
         public async Task DeleteAsync(int id) => await DeleteAsync($"{_url}/{id}");
+        public async Task<List<Symptom>> GetTopAsync() => await GetAsync<List<Symptom>>($"{_url}/top");
+
+        public async Task<int> GetCountAsync() => await GetAsync<int>($"{_url}/count");
     }
 }

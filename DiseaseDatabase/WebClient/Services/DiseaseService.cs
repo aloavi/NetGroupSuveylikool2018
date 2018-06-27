@@ -10,9 +10,9 @@ namespace WebClient.Services
     public class DiseaseService : BaseService, IDiseaseService
     {
         private readonly string _url;
-        protected DiseaseService(IConfiguration configuration, IHttpContextAccessor httpContextAccessor) : base(configuration, httpContextAccessor)
+        public DiseaseService(IConfiguration configuration) : base(configuration)
         {
-            _url = configuration["Api:Books"];
+            _url = configuration["Api:Diseases"];
         }
 
         public async Task<List<Disease>> GetAllAsync() => await GetAsync<List<Disease>>(_url);
@@ -21,10 +21,11 @@ namespace WebClient.Services
 
         public async Task<Disease> GetByIdAsync(int id) => await GetAsync<Disease>($"{_url}/{id}");
 
-        public async Task<Disease> AddAsync(Disease entity) => await PostAsync(_url, entity);
+        public async Task<Disease> AddAsync(Disease entity) => await PostAsync<Disease>(_url, entity);
 
-        public async Task<Disease> UpdateAsync(Disease entity) => await PutAsync($"{_url}/{entity.DiseaseId}", entity);
+        public async Task<Disease> UpdateAsync(Disease entity) => await PutAsync<Disease>($"{_url}/{entity.DiseaseId}", entity);
 
         public async Task DeleteAsync(int id) => await DeleteAsync($"{_url}/{id}");
+        public async Task<List<Disease>> GetTopAsync() => await GetAsync<List<Disease>>($"{_url}/top");
     }
 }
