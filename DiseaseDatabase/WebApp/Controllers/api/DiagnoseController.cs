@@ -40,9 +40,10 @@ namespace WebApp.Controllers.api
         }
 
         [HttpPost("interactive")]
-        public async Task<Questionnaire> DiagnoseInteractive([FromBody] Questionnaire answers)
+        public async Task<ActionResult<Questionnaire>> DiagnoseInteractive([FromBody] Questionnaire answers)
         {
-            //TODO Validation
+            if (answers.NewQuestion.Answer == null)
+                return BadRequest("Question needs to be answered YES or NO");
 
             return await _diagnoseService.DiagnoseInteractiveAsync(answers);
         }

@@ -10,5 +10,6 @@ namespace DAL.App.Interfaces.Repositories
         Task<Disease> FindByNameAsync(string name);
         Task<List<Disease>> GetTopDiseasesAsync(int take);
         Task<List<Disease>> GetBySymptomsAsync(List<Symptom> symptoms);
+        Task<List<Disease>> GetDiseasesWithSymptoms();
     }
 }

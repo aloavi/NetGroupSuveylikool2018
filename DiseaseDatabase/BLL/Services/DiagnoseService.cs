@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BLL.DTO;
@@ -52,35 +53,60 @@ namespace BLL.Services
         public async Task<Questionnaire> DiagnoseInteractiveAsync(Questionnaire questionnaire)
         {
             if (questionnaire.NewQuestion != null)
-                questionnaire.PreviousAnswers.Append(questionnaire.NewQuestion);
+                questionnaire.PreviousAnswers.Add(questionnaire.NewQuestion);
 
-            questionnaire.NewQuestion = new Question() { SymptomDTO = await GetSymptomForQuestionAsync(questionnaire.PreviousAnswers) };
+            var diseases = await FilterDiseasesAsync(questionnaire.PreviousAnswers);
+
+            if(diseases.Count > 1)
+                questionnaire.NewQuestion = new Question()
+                {
+                    SymptomDTO = GetSymptomForQuestionAsync(diseases)
+                };
+            else if (diseases.Count == 1)
+                questionnaire.Result = DiseaseDTO.CreateFromDomain(diseases.Single());
+            else
+                return null; // TODO some exeption
             return questionnaire;
         }
 
-        private async Task<SymptomDTO> GetSymptomForQuestionAsync(List<Question> questions)
+        private SymptomDTO GetSymptomForQuestionAsync(List<Disease> diseases)
         {
+            if (!diseases.Any())
+                return null; // TODO possibly throw some exeption;
 
-            // TODO All this is wrong. Get Diseases and filter those instead. Taking a Break
-            // Get all symptoms
-            var dbSymptoms = await _uow.Symptoms.GetSymptomsWithDiseases();
+            var opt = diseases.Count / 2;
+
+            // Select symptoms and group by disease Count.
+            var symptoms = diseases
+                .SelectMany(d => d.Symptoms)
+                .GroupBy(s => s.Symptom.SymptomName)
+                .GroupBy(x => x.Count());
+
+            // Pick first closest symptom
+            var symptom = symptoms
+                .OrderBy(x => Math.Abs((long)x.Key - opt))
+                .First()
+                .ElementAt(0)
+                .ElementAt(0);
+
+            return SymptomDTO.CreateFromDomain(symptom.Symptom);
+        }
+
+        private async Task<List<Disease>> FilterDiseasesAsync(List<Question> questions)
+        {
+            var dbDiseases = await _uow.Diseases.GetDiseasesWithSymptoms();
             // Turn them into queriable
-            var symptoms = dbSymptoms.AsQueryable();
+            var diseases = dbDiseases.AsQueryable();
             // Filter based on already ansewered questions
             if (questions != null)
-            {
                 foreach (var question in questions)
                 {
-                    if (question.Answer == null) return null; // Should not be possible. All questions must be answered
-                    symptoms = question.Answer.Value
-                        ? symptoms.Where(s => s.SymptomId == question.SymptomDTO.SymptomId)
-                        : symptoms.Where(s => s.SymptomId != question.SymptomDTO.SymptomId);
+                    if (question.Answer == null) return null; // Should not be possible. All questions must be answered TODO throw some exeption
+                    diseases = question.Answer.Value
+                        ? diseases.Where(d => d.Symptoms.Any(s => s.SymptomId == question.SymptomDTO.SymptomId))
+                        : diseases.Where(d => d.Symptoms.All(s => s.SymptomId != question.SymptomDTO.SymptomId));
                 }
-            }
-
-            var x = symptoms.GroupBy(x => x.Diseases);
-
-            return symptoms.Select(SymptomDTO.CreateFromDomain).FirstOrDefault();
+            return diseases.ToList();
         }
     }
 }
