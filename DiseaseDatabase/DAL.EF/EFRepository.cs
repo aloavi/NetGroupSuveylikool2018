@@ -29,6 +29,11 @@ namespace DAL.EF
             await RepositoryDbSet.AddAsync(entity);
         }
 
+        public async Task AddRangeAsync(List<TEntity> entity)
+        {
+            await RepositoryDbSet.AddRangeAsync(entity);
+        }
+
         public virtual TEntity Update(TEntity entity)
         {
             return RepositoryDbSet.Update(entity).Entity;
