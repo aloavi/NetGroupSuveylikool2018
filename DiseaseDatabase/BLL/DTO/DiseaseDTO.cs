@@ -10,7 +10,6 @@ namespace BLL.DTO
     public class DiseaseDTO
     {
         public int DiseaseId { get; set; }
-        [Required]
         [MaxLength(120)]
         public string DiseaseName { get; set; }
 

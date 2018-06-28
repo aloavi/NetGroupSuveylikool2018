@@ -8,7 +8,6 @@ namespace BLL.DTO
     public class SymptomDTO
     {
         public int SymptomId { get; set; }
-        [Required]
         [MaxLength(120)]
         public string SymptomName { get; set; }
 

@@ -27,7 +27,9 @@ namespace WebClient.Controllers
         // GET: Symptoms/Details/5
         public async Task<ActionResult> Details(int id)
         {
-            return View(await _symptomService.GetByIdAsync(id));
+            var symptom = await _symptomService.GetByIdAsync(id);
+            if (symptom == null) return NotFound();
+            return View(symptom);
         }
 
         // GET: Symptoms/Create
@@ -41,23 +43,20 @@ namespace WebClient.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(Symptom symptom)
         {
-            //TODO Validation
-            try
+            if (ModelState.IsValid)
             {
                 await _symptomService.AddAsync(symptom);
-
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View(symptom);
-            }
+            return View(symptom);
         }
 
         // GET: Symptoms/Edit/5
         public async Task<ActionResult> Edit(int id)
         {
-            return View(await _symptomService.GetByIdAsync(id));
+            var symptom = await _symptomService.GetByIdAsync(id);
+            if (symptom == null) return NotFound();
+            return View(symptom);
         }
 
         // POST: Symptoms/Edit/5
@@ -65,23 +64,20 @@ namespace WebClient.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(int id, Symptom symptom)
         {
-            //TODO Validation
-            try
+            if (ModelState.IsValid)
             {
                 await _symptomService.UpdateAsync(symptom);
-
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View(symptom);
-            }
+            return View(symptom);
         }
 
         // GET: Symptoms/Delete/5
         public async Task<ActionResult> Delete(int id)
         {
-            return View(await _symptomService.GetByIdAsync(id));
+            var symptom = await _symptomService.GetByIdAsync(id);
+            if (symptom == null) return NotFound();
+            return View(symptom);
         }
 
         // POST: Symptoms/Delete/5
@@ -89,17 +85,8 @@ namespace WebClient.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(int id, Symptom symptom)
         {
-            //TODO Validation
-            try
-            {
-                await _symptomService.DeleteAsync(symptom.SymptomId);
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View(symptom);
-            }
+            await _symptomService.DeleteAsync(symptom.SymptomId);
+            return RedirectToAction(nameof(Index));
         }
     }
 }

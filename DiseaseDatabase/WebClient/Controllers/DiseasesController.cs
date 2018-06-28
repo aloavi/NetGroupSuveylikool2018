@@ -54,12 +54,14 @@ namespace WebClient.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (vm.SymptomIds != null)
+                    vm.Disease.Symptoms = vm.SymptomIds.Select(x => new Symptom() { SymptomId = x }).ToList();
                 await _diseaseService.AddAsync(vm.Disease);
                 return RedirectToAction(nameof(Index));
             }
 
             vm.SymtomsSelectList = new MultiSelectList(await _symptomService.GetAllAsync(),
-                nameof(Symptom.SymptomId), nameof(Symptom.SymptomName), vm.Disease.Symptoms);
+                nameof(Symptom.SymptomId), nameof(Symptom.SymptomName), vm.SymptomIds);
             return View(vm);
 
         }
@@ -69,12 +71,15 @@ namespace WebClient.Controllers
         {
             var disease = await _diseaseService.GetByIdAsync(id);
             if (disease == null) return NotFound();
+
             var vm = new DiseaseCreateEditViewModel
             {
-                Disease = disease,
-                SymtomsSelectList = new MultiSelectList(await _symptomService.GetAllAsync(),
-                    nameof(Symptom.SymptomId), nameof(Symptom.SymptomName), disease.Symptoms)
+                SymptomIds = disease.Symptoms.Select(s => s.SymptomId).ToList(),
+                Disease = disease
             };
+            vm.SymtomsSelectList = new MultiSelectList(await _symptomService.GetAllAsync(),
+                nameof(Symptom.SymptomId), nameof(Symptom.SymptomName), vm.SymptomIds);
+            
             return View(vm);
         }
 
@@ -85,11 +90,13 @@ namespace WebClient.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (vm.SymptomIds != null)
+                    vm.Disease.Symptoms = vm.SymptomIds.Select(x => new Symptom() { SymptomId = x }).ToList();
                 await _diseaseService.UpdateAsync(vm.Disease);
                 return RedirectToAction(nameof(Index));
             }
             vm.SymtomsSelectList = new MultiSelectList(await _symptomService.GetAllAsync(),
-                nameof(Symptom.SymptomId), nameof(Symptom.SymptomName), vm.Disease.Symptoms);
+                nameof(Symptom.SymptomId), nameof(Symptom.SymptomName), vm.SymptomIds);
             return View(vm);
         }
 

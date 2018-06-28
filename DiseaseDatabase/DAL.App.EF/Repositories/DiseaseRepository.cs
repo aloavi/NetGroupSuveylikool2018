@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DAL.App.Interfaces.Repositories;
@@ -50,12 +51,17 @@ namespace DAL.App.EF.Repositories
             return ret;
         }
 
-        public async Task<List<Disease>> GetDiseasesWithSymptoms()
+        public async Task<List<Disease>> GetDiseasesWithSymptomsAsync()
         {
             return await RepositoryDbSet
                 .Include(d=> d.Symptoms)
                 .ThenInclude(s => s.Symptom)
                 .ToListAsync();
+        }
+
+        public async Task<Disease> GetByIdWithSymptomsAsync(int id)
+        {
+            return await RepositoryDbSet.Include(d => d.Symptoms).ThenInclude(s => s.Symptom).FirstOrDefaultAsync(x => x.DiseaseId == id);
         }
     }
 }

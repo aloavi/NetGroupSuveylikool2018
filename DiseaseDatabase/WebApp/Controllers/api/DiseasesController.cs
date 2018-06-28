@@ -68,8 +68,7 @@ namespace WebApp.Controllers.api
 
             try
             {
-                dbDisease.DiseaseName = disease.DiseaseName;
-                await _diseaseService.Update(dbDisease);
+                await _diseaseService.Update(disease);
             }
             catch (DbUpdateConcurrencyException)
             {

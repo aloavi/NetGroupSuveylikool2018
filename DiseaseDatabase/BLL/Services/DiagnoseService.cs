@@ -94,7 +94,7 @@ namespace BLL.Services
 
         private async Task<List<Disease>> FilterDiseasesAsync(List<Question> questions)
         {
-            var dbDiseases = await _uow.Diseases.GetDiseasesWithSymptoms();
+            var dbDiseases = await _uow.Diseases.GetDiseasesWithSymptomsAsync();
             // Turn them into queriable
             var diseases = dbDiseases.AsQueryable();
             // Filter based on already ansewered questions
