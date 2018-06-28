@@ -6,5 +6,6 @@ namespace Helpers
     {
         Task ClearDb();
         Task InitializeDbAsync();
+        Task InitializeDbAsync(string[] csv);
     }
 }

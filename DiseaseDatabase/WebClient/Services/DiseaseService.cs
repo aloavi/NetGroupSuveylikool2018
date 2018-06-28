@@ -27,5 +27,6 @@ namespace WebClient.Services
 
         public async Task DeleteAsync(int id) => await DeleteAsync($"{_url}/{id}");
         public async Task<List<Disease>> GetTopAsync() => await GetAsync<List<Disease>>($"{_url}/top");
+        public async Task PostCsvAsync(string[] csv) => await PostAsync<object>($"{_url}/csv", csv);
     }
 }

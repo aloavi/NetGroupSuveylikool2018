@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using BLL.DTO;
 using BLL.Interfaces;
+using Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,10 +13,12 @@ namespace WebApp.Controllers.api
     public class DiseasesController : ControllerBase
     {
         private readonly IDiseaseService _diseaseService;
+        private readonly IAppDataInitializator _dataInitializator;
 
-        public DiseasesController(IDiseaseService diseaseService)
+        public DiseasesController(IDiseaseService diseaseService, IAppDataInitializator dataInitializator)
         {
             _diseaseService = diseaseService;
+            _dataInitializator = dataInitializator;
         }
 
         #region CRUD
@@ -135,6 +138,15 @@ namespace WebApp.Controllers.api
         {
             if (take == null) take = 3;
             return await _diseaseService.GetTopDiseasesAsync(take.Value);
+        }
+
+
+        [HttpPost("csv")]
+        public async Task<IActionResult> Csv([FromBody]string[] csv)
+        {
+            await _dataInitializator.ClearDb();
+            await _dataInitializator.InitializeDbAsync(csv);
+            return NoContent();
         }
     }
 }

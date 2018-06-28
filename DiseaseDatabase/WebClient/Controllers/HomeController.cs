@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebClient.Models;
 using WebClient.Services.Interfaces;
@@ -30,6 +32,30 @@ namespace WebClient.Controllers
                 SymptomCount = await _symptomService.GetCountAsync()
             };
             return View(vm);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Upload(IFormFile file)
+        {
+            if (file != null)
+            {
+                // full path to file in temp location
+                var filePath = Path.GetTempFileName();
+
+                if (file.Length > 0)
+                {
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
+
+                    var content = await System.IO.File.ReadAllLinesAsync(filePath);
+                    await _diseaseService.PostCsvAsync(content); // TODO Go to Disease list maybe
+
+                }
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Privacy()
