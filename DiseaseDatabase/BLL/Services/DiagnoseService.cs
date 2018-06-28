@@ -65,14 +65,14 @@ namespace BLL.Services
             else if (diseases.Count == 1)
                 questionnaire.Result = DiseaseDTO.CreateFromDomain(diseases.Single());
             else
-                return null; // TODO some exeption
+                throw new ArgumentException("Previous questions don't match any disease in the database");
             return questionnaire;
         }
 
         private SymptomDTO GetSymptomForQuestionAsync(List<Disease> diseases)
         {
             if (!diseases.Any())
-                return null; // TODO possibly throw some exeption;
+                throw new ArgumentNullException();
 
             var opt = diseases.Count / 2;
 

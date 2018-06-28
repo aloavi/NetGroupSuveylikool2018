@@ -51,8 +51,8 @@ namespace WebClient.Controllers
                     }
 
                     var content = await System.IO.File.ReadAllLinesAsync(filePath);
-                    await _diseaseService.PostCsvAsync(content); // TODO Go to Disease list maybe
-
+                    await _diseaseService.PostCsvAsync(content);
+                    RedirectToAction(nameof(Index), "Diseases");
                 }
             }
             return RedirectToAction(nameof(Index));

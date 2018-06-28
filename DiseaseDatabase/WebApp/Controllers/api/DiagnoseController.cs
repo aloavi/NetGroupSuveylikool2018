@@ -28,7 +28,7 @@ namespace WebApp.Controllers.api
         [HttpPost]
         public async Task<ActionResult<List<DiseaseDTO>>> Diagnose([FromBody] List<SymptomDTO> symptoms)
         {
-            //TODO Validation
+            if (!symptoms.Any()) return BadRequest("One or more symptoms must be provided");
 
             return await _diagnoseService.DiagnoseAsync(symptoms);
         }

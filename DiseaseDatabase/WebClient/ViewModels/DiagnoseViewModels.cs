@@ -9,9 +9,4 @@ namespace WebClient.ViewModels
         public List<Symptom> Symptoms { get; set; }
         public List<Disease> Diseases { get; set; }
     }
-    public class DiagnoseQuestionnaireViewModel
-    {
-        // TODO Replace with actual fields
-
-    }
 }

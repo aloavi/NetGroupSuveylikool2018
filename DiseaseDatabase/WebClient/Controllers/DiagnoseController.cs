@@ -47,7 +47,6 @@ namespace WebClient.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Results(DiagnoseSymtomsViewModel vm)
         {
-            //TODO Check if none were selected
             var selectedSymptoms = vm.Symptoms.Where(s => s.IsSelected).ToList();
             if (selectedSymptoms.Count > 0)
             {

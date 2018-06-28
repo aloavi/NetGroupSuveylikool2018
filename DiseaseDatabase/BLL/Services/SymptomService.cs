@@ -30,7 +30,7 @@ namespace BLL.Services
         public async Task<List<SymptomDTO>> GetAllAsync()
         {
             var symptoms = await _uow.Symptoms.AllAsync();
-            return symptoms.Select(SymptomDTO.CreateFromDomain).ToList();
+            return symptoms.Select(SymptomDTO.CreateFromDomain).OrderBy(s => s.SymptomName).ToList();
         }
 
         public async Task<SymptomDTO> GetByIdAsync(int id)

@@ -25,7 +25,7 @@ namespace BLL.Services
         public async Task<List<DiseaseDTO>> GetAllAsync()
         {
             var diseases = await _uow.Diseases.AllAsync();
-            return diseases.Select(DiseaseDTO.CreateFromDomain).ToList();
+            return diseases.Select(DiseaseDTO.CreateFromDomain).OrderBy(d => d.DiseaseName).ToList();
         }
 
         public async Task<DiseaseDTO> GetByIdAsync(int id)
@@ -43,8 +43,6 @@ namespace BLL.Services
 
             return DiseaseDTO.CreateFromDomain(disease);
         }
-
-        // TODO: Add with Symptoms
 
         public async Task<DiseaseDTO> Update(DiseaseDTO dto)
         {

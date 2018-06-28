@@ -32,7 +32,9 @@ namespace WebClient.Controllers
         // GET: Diseases/Details/5
         public async Task<ActionResult> Details(int id)
         {
-            return View(await _diseaseService.GetByIdAsync(id));
+            var disease = await _diseaseService.GetByIdAsync(id);
+            if (disease == null) return NotFound();
+            return View(disease);
         }
 
         // GET: Diseases/Create
@@ -50,25 +52,23 @@ namespace WebClient.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(DiseaseCreateEditViewModel vm)
         {
-            //TODO Validation
-            try
+            if (ModelState.IsValid)
             {
                 await _diseaseService.AddAsync(vm.Disease);
-
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                vm.SymtomsSelectList = new MultiSelectList(await _symptomService.GetAllAsync(),
-                    nameof(Symptom.SymptomId), nameof(Symptom.SymptomName), vm.Disease.Symptoms);
-                return View(vm);
-            }
+
+            vm.SymtomsSelectList = new MultiSelectList(await _symptomService.GetAllAsync(),
+                nameof(Symptom.SymptomId), nameof(Symptom.SymptomName), vm.Disease.Symptoms);
+            return View(vm);
+
         }
 
         // GET: Diseases/Edit/5
         public async Task<ActionResult> Edit(int id)
         {
             var disease = await _diseaseService.GetByIdAsync(id);
+            if (disease == null) return NotFound();
             var vm = new DiseaseCreateEditViewModel
             {
                 Disease = disease,
@@ -83,25 +83,22 @@ namespace WebClient.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(int id, DiseaseCreateEditViewModel vm)
         {
-            //TODO Validation
-            try
+            if (ModelState.IsValid)
             {
                 await _diseaseService.UpdateAsync(vm.Disease);
-
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                vm.SymtomsSelectList = new MultiSelectList(await _symptomService.GetAllAsync(),
-                    nameof(Symptom.SymptomId), nameof(Symptom.SymptomName), vm.Disease.Symptoms);
-                return View(vm);
-            }
+            vm.SymtomsSelectList = new MultiSelectList(await _symptomService.GetAllAsync(),
+                nameof(Symptom.SymptomId), nameof(Symptom.SymptomName), vm.Disease.Symptoms);
+            return View(vm);
         }
 
         // GET: Diseases/Delete/5
         public async Task<ActionResult> Delete(int id)
         {
-            return View(await _diseaseService.GetByIdAsync(id));
+            var disease = await _diseaseService.GetByIdAsync(id);
+            if (disease == null) return NotFound();
+            return View(disease);
         }
 
         // POST: Diseases/Delete/5
@@ -109,17 +106,8 @@ namespace WebClient.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, Disease disease)
         {
-            //TODO Validation
-            try
-            {
-                _diseaseService.DeleteAsync(disease.DiseaseId);
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View(disease);
-            }
+            _diseaseService.DeleteAsync(disease.DiseaseId);
+            return RedirectToAction(nameof(Index));
         }
     }
 }
