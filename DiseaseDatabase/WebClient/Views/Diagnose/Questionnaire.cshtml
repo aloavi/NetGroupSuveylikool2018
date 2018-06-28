@@ -1,7 +1,32 @@
-﻿
+﻿@model Questionnaire
 @{
     ViewData["Title"] = "Questionnaire";
 }
 
 <h2>Questionnaire</h2>
+
+<form asp-action="Questionnaire" method="post">
+    @for (var index = 0; index < Model.PreviousAnswers.Count; index++)
+    {
+        @Html.HiddenFor(m => m.PreviousAnswers[index].Answer)
+        @Html.HiddenFor(m => m.PreviousAnswers[index].Symptom.SymptomName)
+        @Html.HiddenFor(m => m.PreviousAnswers[index].Symptom.SymptomId)
+    }
+    <div class="form-group">
+        <label asp-for="NewQuestion">Question</label>
+        <p>
+            <span>Does the patient exhibit symptom </span>
+            <span>@Html.DisplayFor(model => model.NewQuestion.Symptom.SymptomName)</span>
+            <span>?</span>
+        </p>
+    </div>
+    <div class="form-group">
+        <input hidden asp-for="NewQuestion" />
+        <input hidden asp-for="NewQuestion.Symptom" />
+        <input hidden asp-for="NewQuestion.Symptom.SymptomId" />
+        <input hidden asp-for="NewQuestion.Symptom.SymptomName" />
+        <button id="btn_no" name="NewQuestion.Answer" value="false" class="btn btn-default">No</button>
+        <button id="btn_yes" name="NewQuestion.Answer" value="true" class="btn btn-default">Yes</button>
+    </div>
+</form>
 

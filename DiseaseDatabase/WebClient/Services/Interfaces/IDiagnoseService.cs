@@ -8,5 +8,7 @@ namespace WebClient.Services.Interfaces
     public interface IDiagnoseService
     {
         Task<List<Disease>> DiagnoseBySymptomsAsync(List<Symptom> symptoms);
+        Task<Questionnaire> InteractiveDiagnosisAsync();
+        Task<Questionnaire> InteractiveDiagnosisAsync(Questionnaire questionnaire);
     }
 }

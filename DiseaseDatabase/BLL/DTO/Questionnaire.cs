@@ -12,7 +12,7 @@ namespace BLL.DTO
 
     public class Question
     {
-        public SymptomDTO SymptomDTO { get; set; }
+        public SymptomDTO Symptom { get; set; }
         public bool? Answer { get; set; }
     }
 }

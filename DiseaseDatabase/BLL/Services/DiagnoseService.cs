@@ -60,7 +60,7 @@ namespace BLL.Services
             if(diseases.Count > 1)
                 questionnaire.NewQuestion = new Question()
                 {
-                    SymptomDTO = GetSymptomForQuestionAsync(diseases)
+                    Symptom = GetSymptomForQuestionAsync(diseases)
                 };
             else if (diseases.Count == 1)
                 questionnaire.Result = DiseaseDTO.CreateFromDomain(diseases.Single());
@@ -103,8 +103,8 @@ namespace BLL.Services
                 {
                     if (question.Answer == null) return null; // Should not be possible. All questions must be answered TODO throw some exeption
                     diseases = question.Answer.Value
-                        ? diseases.Where(d => d.Symptoms.Any(s => s.SymptomId == question.SymptomDTO.SymptomId))
-                        : diseases.Where(d => d.Symptoms.All(s => s.SymptomId != question.SymptomDTO.SymptomId));
+                        ? diseases.Where(d => d.Symptoms.Any(s => s.SymptomId == question.Symptom.SymptomId))
+                        : diseases.Where(d => d.Symptoms.All(s => s.SymptomId != question.Symptom.SymptomId));
                 }
             return diseases.ToList();
         }

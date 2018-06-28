@@ -35,6 +35,7 @@ namespace WebClient.Controllers
             return View(vm);
         }
 
+        // Only used when an error occurred
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Symptoms(DiagnoseSymtomsViewModel vm)
@@ -60,17 +61,19 @@ namespace WebClient.Controllers
             return RedirectToAction(nameof(Symptoms), vm);
         }
 
-        public IActionResult Questionnaire()
+        public async Task<IActionResult> Questionnaire()
         {
-            // TODO complete afther api side gets done
-            return View();
+            var vm = await _diagnoseService.InteractiveDiagnosisAsync();
+            return View(vm);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Questionnaire(DiagnoseQuestionnaireViewModel vm)
+        [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
+        public async Task<IActionResult> Questionnaire(Questionnaire vm)
         {
-            return View();
+            var newVm = await _diagnoseService.InteractiveDiagnosisAsync(vm);
+            return View(newVm);
         }
 
     }
